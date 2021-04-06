@@ -15,27 +15,25 @@ const loginForm = document.querySelector('#login-form')
 
 // NAV LINKS
 homeLink.addEventListener('click', () => {
-  sections.forEach(s => s.classList.add('hidden'))
-  homeContent.classList.remove('hidden')
+  goHome()
 })
 
 signupLink.addEventListener('click', () => {
-  sections.forEach(s => s.classList.add('hidden'))
+  hideAllSections()
   signupContent.classList.remove('hidden')
 })
 
 loginLink.addEventListener('click', () => {
-  sections.forEach(s => s.classList.add('hidden'))
+  hideAllSections()
   loginContent.classList.remove('hidden')
 })
 
 logoutLink.addEventListener('click', () => {
-  sections.forEach(s => s.classList.add('hidden'))
-  homeContent.classList.remove('hidden')
+  goHome()
 })
 
 profileLink.addEventListener('click', () => {
-  sections.forEach(s => s.classList.add('hidden'))
+  hideAllSections()
   profileContent.classList.remove('hidden')
 })
 
@@ -57,6 +55,10 @@ signupForm.addEventListener('submit', async (e) => {
     console.log('AXIOS RESPONSE', response.status, response.statusText)
     const userId = response.data.user.id
     localStorage.setItem('userId', userId)
+    if(response.status === 200){
+      goHome()
+      checkLoggedIn()
+    }
   } catch (error) {
     console.log('ERROR', error)
   }
@@ -78,6 +80,10 @@ loginForm.addEventListener('submit', async (e) => {
     console.log('AXIOS RESPONSE', response.status, response.statusText)
     const userId = response.data.user.id
     localStorage.setItem('userId', userId)
+    if(response.status === 200){
+      goHome()
+      checkLoggedIn()
+    }
   } catch (error) {
     console.log('ERROR', error)
   }
@@ -86,5 +92,32 @@ loginForm.addEventListener('submit', async (e) => {
 // USER LOGOUT
 logoutLink.addEventListener('click', (e) => {
   localStorage.removeItem('userId')
-  homeLink.click()
+  goHome()
+  checkLoggedIn()
 })
+
+// REUSABLE FUNCTIONS
+function hideAllSections() {
+  sections.forEach(s => s.classList.add('hidden'))
+}
+
+function goHome() {
+  hideAllSections()
+  homeContent.classList.remove('hidden')
+}
+
+function checkLoggedIn() {
+  if(localStorage.getItem('userId')){
+    // goHome()
+    signupLink.classList.add('hidden')
+    loginLink.classList.add('hidden')
+    logoutLink.classList.remove('hidden')
+    profileLink.classList.remove('hidden')
+  } else {
+    signupLink.classList.remove('hidden')
+    loginLink.classList.remove('hidden')
+    logoutLink.classList.add('hidden')
+    profileLink.classList.add('hidden')
+  }
+}
+checkLoggedIn()
