@@ -24,3 +24,19 @@ document.querySelector('#profile-link').addEventListener('click', () => {
   document.querySelector('#profile-content').classList.remove('hidden')
 })
 
+// form submissions
+document.querySelector('#signup-form').addEventListener('submit', async (event) => {
+  event.preventDefault()
+
+  try {
+    const response = await axios.post('http://localhost:3001/users', {
+      email: document.querySelector('#signup-email').value,
+      password: document.querySelector('#signup-password').value,
+    })
+    
+    localStorage.setItem('userId', response.data.user.id)
+  } catch (error) {
+    alert('email already taken')
+  }
+})
+
