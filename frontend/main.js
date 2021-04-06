@@ -19,6 +19,11 @@ document.querySelector('#logout-link').addEventListener('click', () => {
   document.querySelector('#login-content').classList.remove('hidden')
 
   localStorage.removeItem('userId')
+
+  document.querySelector('#login-link').classList.remove('hidden')
+  document.querySelector('#signup-link').classList.remove('hidden')
+  document.querySelector('#logout-link').classList.add('hidden')
+  document.querySelector('#profile-link').classList.add('hidden')
 })
 
 document.querySelector('#profile-link').addEventListener('click', () => {
@@ -37,6 +42,14 @@ document.querySelector('#signup-form').addEventListener('submit', async (event) 
     })
     
     localStorage.setItem('userId', response.data.user.id)
+
+    document.querySelector('#login-link').classList.add('hidden')
+    document.querySelector('#signup-link').classList.add('hidden')
+    document.querySelector('#logout-link').classList.remove('hidden')
+    document.querySelector('#profile-link').classList.remove('hidden')
+
+    document.querySelectorAll('section').forEach(s => s.classList.add('hidden'))
+    document.querySelector('#home-content').classList.remove('hidden')  
   } catch (error) {
     alert('email already taken')
   }
@@ -52,7 +65,24 @@ document.querySelector('#login-form').addEventListener('submit', async (event) =
     })
     
     localStorage.setItem('userId', response.data.user.id)
+
+    document.querySelector('#login-link').classList.add('hidden')
+    document.querySelector('#signup-link').classList.add('hidden')
+    document.querySelector('#logout-link').classList.remove('hidden')
+    document.querySelector('#profile-link').classList.remove('hidden')
+
+    document.querySelectorAll('section').forEach(s => s.classList.add('hidden'))
+    document.querySelector('#home-content').classList.remove('hidden')  
   } catch (error) {
     alert('login failed')
   }
 })
+
+// as soon as the page is loaded, show/hide the appropriate links
+if (localStorage.getItem('userId')) {
+  document.querySelector('#login-link').classList.add('hidden')
+  document.querySelector('#signup-link').classList.add('hidden')
+} else {
+  document.querySelector('#logout-link').classList.add('hidden')
+  document.querySelector('#profile-link').classList.add('hidden')
+}
