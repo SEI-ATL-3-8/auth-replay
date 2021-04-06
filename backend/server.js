@@ -1,5 +1,9 @@
+require('dotenv').config()
+
 const express = require('express')
 const app = express()
+
+const jwt = require('jsonwebtoken')
 
 const rowdy = require ('rowdy-logger')
 const routesReport = rowdy.begin(app)
@@ -16,7 +20,9 @@ const createUser = async (req, res) => {
       password: req.body.password
     })
 
-    res.json({ message: 'signup successful', user })
+    const encryptedId = jwt.sign({ userId: user.id }, process.env.JWT_SECRET)
+
+    res.json({ message: 'signup successful', userId: encryptedId })
   } catch (error) {
     res.status(400)
     res.json({ error: 'email already taken' })
