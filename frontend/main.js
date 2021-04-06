@@ -16,7 +16,9 @@ document.querySelector('#login-link').addEventListener('click', () => {
 
 document.querySelector('#logout-link').addEventListener('click', () => {
   document.querySelectorAll('section').forEach(s => s.classList.add('hidden'))
-  document.querySelector('#home-content').classList.remove('hidden')
+  document.querySelector('#login-content').classList.remove('hidden')
+
+  localStorage.removeItem('userId')
 })
 
 document.querySelector('#profile-link').addEventListener('click', () => {
