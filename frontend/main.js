@@ -56,7 +56,7 @@ document.querySelector('#signup-form').addEventListener('submit', async (event) 
       password: document.querySelector('#signup-password').value,
     })
     
-    localStorage.setItem('userId', response.data.user.id)
+    localStorage.setItem('userId', response.data.userId)
 
     document.querySelector('#login-link').classList.add('hidden')
     document.querySelector('#signup-link').classList.add('hidden')
@@ -79,7 +79,7 @@ document.querySelector('#login-form').addEventListener('submit', async (event) =
       password: document.querySelector('#login-password').value,
     })
     
-    localStorage.setItem('userId', response.data.user.id)
+    localStorage.setItem('userId', response.data.userId)
 
     document.querySelector('#login-link').classList.add('hidden')
     document.querySelector('#signup-link').classList.add('hidden')

@@ -1,3 +1,5 @@
+// note that IRL, you would add .env to your .gitignore
+// it's included here just as a demo
 require('dotenv').config()
 
 const express = require('express')
@@ -39,7 +41,9 @@ const login = async (req, res) => {
     })
 
     if (user.password === req.body.password) {
-      res.json({ message: 'login success', user})
+      const encryptedId = jwt.sign({ userId: user.id }, process.env.JWT_SECRET)
+
+      res.json({ message: 'login successful', userId: encryptedId })
     } else {
       res.status(401).json({ error: 'login failed' })
     }
@@ -53,15 +57,19 @@ const userProfile = async (req, res) => {
   try {
     // get the value out of headers instead of body
     // because that's where the frontend included it
-    console.log(req.headers)
+
+    // now that we encrypted the id before sending it to the client, we need to decrypt it when they send it back
+    const decryptedId = jwt.verify(req.headers.authorization, process.env.JWT_SECRET)
     const user = await models.user.findOne({
       where: {
-        id: req.headers.authorization
+        // note that decryptedId will be an object like this: { userId: 5 }
+        id: decryptedId.userId
       }
     })
 
     res.json({ user })
   } catch (error) {
+    console.log(error)
     res.status(404).json({ error: 'user profile not found' })
   }
 }
