@@ -6,6 +6,7 @@ const express = require('express')
 const app = express()
 
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 
 const rowdy = require ('rowdy-logger')
 const routesReport = rowdy.begin(app)
@@ -17,9 +18,11 @@ const models = require('./models')
 
 const createUser = async (req, res) => {
   try {
+    const hashedPassword = bcrypt.hashSync(req.body.password, 10)
+
     const user = await models.user.create({
       email: req.body.email,
-      password: req.body.password
+      password: hashedPassword
     })
 
     const encryptedId = jwt.sign({ userId: user.id }, process.env.JWT_SECRET)
@@ -40,7 +43,7 @@ const login = async (req, res) => {
       }
     })
 
-    if (user.password === req.body.password) {
+    if (bcrypt.compareSync(req.body.password, user.password)) {
       const encryptedId = jwt.sign({ userId: user.id }, process.env.JWT_SECRET)
 
       res.json({ message: 'login successful', userId: encryptedId })
@@ -48,6 +51,7 @@ const login = async (req, res) => {
       res.status(401).json({ error: 'login failed' })
     }
   } catch (error) {
+    console.log(error)
     res.status(400).json({ error: 'login failed' })
   }
 }
