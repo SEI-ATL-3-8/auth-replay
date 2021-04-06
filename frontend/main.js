@@ -40,3 +40,17 @@ document.querySelector('#signup-form').addEventListener('submit', async (event) 
   }
 })
 
+document.querySelector('#login-form').addEventListener('submit', async (event) => {
+  event.preventDefault()
+
+  try {
+    const response = await axios.post('http://localhost:3001/users/login', {
+      email: document.querySelector('#login-email').value,
+      password: document.querySelector('#login-password').value,
+    })
+    
+    localStorage.setItem('userId', response.data.user.id)
+  } catch (error) {
+    alert('login failed')
+  }
+})
