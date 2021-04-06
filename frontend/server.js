@@ -3,7 +3,10 @@ const app = express()
 
 const routesReport = require('rowdy-logger').begin(app)
 
+const morgan = require('morgan')
 const path = require('path')
+
+app.use(morgan('tiny'))
 
 app.get('/', (req, res) => {
   const filepath = path.join(__dirname, 'index.html')
@@ -20,7 +23,7 @@ app.get('/style.css', (req, res) => {
   res.type('css').sendFile(filepath)
 })
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 5500
 app.listen(port, () => {
   routesReport.print()
 })
