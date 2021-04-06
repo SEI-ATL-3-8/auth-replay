@@ -26,9 +26,24 @@ document.querySelector('#logout-link').addEventListener('click', () => {
   document.querySelector('#profile-link').classList.add('hidden')
 })
 
-document.querySelector('#profile-link').addEventListener('click', () => {
+document.querySelector('#profile-link').addEventListener('click', async () => {
   document.querySelectorAll('section').forEach(s => s.classList.add('hidden'))
   document.querySelector('#profile-content').classList.remove('hidden')
+
+  try {
+    // it's a firm convention to put the id of the currently logged in user into the authorization headers, not the request body
+    const response = await axios.get('http://localhost:3001/users/profile', {
+      headers: {
+        Authorization: localStorage.getItem('userId')
+      }
+    })
+
+    document.querySelector('#profile-info').innerText = `Welcome back, ${response.data.user.email}!`
+
+  } catch (error) {
+    alert('profile not found')
+  }
+
 })
 
 // form submissions

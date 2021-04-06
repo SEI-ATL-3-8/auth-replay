@@ -43,11 +43,14 @@ const login = async (req, res) => {
 }
 app.post('/users/login', login)
 
-const userProfile = async (req, res) => {
+const userProfile = async (req, res) => {  
   try {
+    // get the value out of headers instead of body
+    // because that's where the frontend included it
+    console.log(req.headers)
     const user = await models.user.findOne({
       where: {
-        id: req.body.userId
+        id: req.headers.authorization
       }
     })
 
