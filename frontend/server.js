@@ -20,7 +20,8 @@ app.get('/style.css', (req, res) => {
   res.type('css').sendFile(filepath)
 })
 
-const port = process.env.PORT || 3000
-app.listen(port, () => {
+const PORT = process.env.PORT || 3000
+app.listen(PORT, () => {
+  console.log(`frontend server on port ${PORT}`);
   routesReport.print()
 })
