@@ -78,6 +78,7 @@ document.querySelector('#login-form').addEventListener('submit', async (event) =
   }
 })
 
+
 // as soon as the page is loaded, show/hide the appropriate links
 if (localStorage.getItem('userId')) {
   document.querySelector('#login-link').classList.add('hidden')

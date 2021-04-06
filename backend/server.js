@@ -43,6 +43,22 @@ const login = async (req, res) => {
 }
 app.post('/users/login', login)
 
+const userProfile = async (req, res) => {
+  try {
+    const user = await models.user.findOne({
+      where: {
+        id: req.body.userId
+      }
+    })
+
+    res.json({ user })
+  } catch (error) {
+    res.status(404).json({ error: 'user profile not found' })
+  }
+}
+app.get('/users/profile', userProfile)
+
+
 const PORT = process.env.port || 3001
 app.listen(PORT, () => {
   routesReport.print()
