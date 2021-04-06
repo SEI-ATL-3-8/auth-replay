@@ -24,6 +24,25 @@ const createUser = async (req, res) => {
 }
 app.post('/users', createUser)
 
+const login = async (req, res) => {
+  try {
+    const user = await models.user.findOne({
+      where: {
+        email: req.body.email
+      }
+    })
+
+    if (user.password === req.body.password) {
+      res.json({ message: 'login success', user})
+    } else {
+      res.status(401).json({ error: 'login failed' })
+    }
+  } catch (error) {
+    res.status(400).json({ error: 'login failed' })
+  }
+}
+app.post('/users/login', login)
+
 const PORT = process.env.port || 3001
 app.listen(PORT, () => {
   routesReport.print()
