@@ -51,19 +51,19 @@ document.querySelector('#profile-link').addEventListener('click', async (event) 
   // make a request, POST http://localhost:3001/users/profile, send a body
   event.preventDefault()
 
-  const userId = localStorage.getItem('userId')
+  const userId = await localStorage.getItem('userId')
+  console.log(userId)
 
   try {
-  const response = await axios.get('http://localhost:3001/users/profile', {
-    params: {
-      userId: userId
-    }
+  const response = await axios.get('http://localhost:3001/users/profile/', {
+      params : {
+      id: userId
+      }
   })
- 
 
+  console.log(response)
 
-  document.querySelectorAll('section').forEach(s =>
-    s.classList.add('hidden'))
+  document.querySelector('#profile-info').innerHTML = `Profile: Email: ${response.data.user.email}, Password: ${response.data.user.password}`
 
 } catch (error) {
   console.log(error)

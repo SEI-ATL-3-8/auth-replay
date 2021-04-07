@@ -58,10 +58,11 @@ const getProfile = async (req, res) => {
     
     const user = await models.user.findOne({
       where: {
-        id: req.body.id
+        id: req.query.id
       }
     })
-    if (user.id === req.body.id) {
+    if (user.id !== null) {
+      console.log('user found')
     res.json({ message: 'user found', user: user})
   } else if (user.id === null) {
     res.status(401)
