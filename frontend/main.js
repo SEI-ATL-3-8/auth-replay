@@ -40,8 +40,8 @@ profileLink.addEventListener('click', async () => {
     let userId = localStorage.getItem('userId')
     console.log(userId)
     let response = await axios.get('http://localhost:3001/users/profile', {
-      params: {
-        userId: userId
+      headers: {
+        authorization: userId
       }
     })
     profileInfo.innerHTML = `OH SUP ${response.data.user.email}`

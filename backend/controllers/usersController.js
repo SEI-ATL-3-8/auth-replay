@@ -37,14 +37,13 @@ usersController.getProfile = async (req, res) => {
     try {
         let user = await models.user.findOne({
             where:{
-                id: req.query.userId
+                id: req.headers.authorization
             }
         })
         res.json({user: user})
     } catch (error) {
         res.json({error})
-    }
-    
+    } 
 }
 
 module.exports = usersController
