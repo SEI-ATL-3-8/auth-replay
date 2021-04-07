@@ -13,7 +13,7 @@
 ## Setup
 - npm i in both repos
 - sequelize db:create/migrate in backend
-- 2 terminal tabs for front & back, run both servers
+- 2 terminal tabs for front & back, run both servers (npm run dev)
 
 ## Chapter 1: Creating a user (aka signup)
 ### Backend
