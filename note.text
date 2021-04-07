@@ -1,0 +1,63 @@
+ chapter 1 
+- backend-
+1.Uniqeness = only this must write in the migration
+others validations are must write in the model,
+
+2.Create uses (app.someting('/user someting)can chekc this is working throug the Postman
+
+3.the steps of making backend 
+(1). make aysnc function
+(2). make app.someting for making vsualy in rowdy
+(3). fill the async function
+example:
+const creatUser = async (req,res) => {
+    try{
+     const use = await models.user.create({
+         email:req.body.email,
+         password:req.body.password
+     })
+    } res.json({user})
+    catch(error){
+        res.staus(400)
+        res.json({error: 'email taken'})
+    }
+}
+app.post('/users', creatUser)
+
+-frontend-
+1.go to html and add <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script> before <scripr src=main.js>
+
+axios is the userfriendly tool to save the mess for using fetch function
+
+2.now we have a backend database and we need to make frontend
+-this is the singup request
+
+document.querySelector('#signup-form').addEventListener('submit',async (event)=> {event.preventDefault()
+
+----- preventDefualt() allow to use the site if it is the prevent = i cannot send the event)-----
+
+const email = document.querySelector('#signup-email').value
+  const password = document.querySelector('#signup-password').value
+
+----- This case localhost 3001 the reason is that we are now on the frontend server so we need to axios(fetch)in 3001-------
+
+try {
+    const response = await axios.post('http://localhost:3001/users', {
+    email: email,
+    password: password
+  })
+  console.log(response)
+  
+  const userId = response.data.user.id 
+  -----the localStorage is temporary memory. it can hold the information until refresh the webpasge or close-----
+  localStorage.setItem('userId',userId)
+
+  document.querySelector('#login-link').classList.add('hidden')
+  document.querySelector('#signup-link').classList.add('hidden')
+
+  
+} catch (error) {
+  alert('email is already tanken')
+  
+}
+})
