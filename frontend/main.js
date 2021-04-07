@@ -95,6 +95,38 @@ document.getElementById('login-form').addEventListener('submit', async event => 
 
 });
 
+document.getElementById('profile-link').addEventListener('click', async () => {
+  authenticate();
+  const id = localStorage.getItem('userId');
+  try {
+    const response = await axios.get('http://localhost:3001/users/profile',{params: {id}});
+    if (response.data.message === 'success') {
+      document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+      document.querySelector('#profile-content').innerText = `email: ${response.data.user.email} \n password: ${response.data.user.password}`
+      document.querySelector('#profile-content').classList.remove('hidden');
+    }
+  }
+  catch({response}) {
+    showErrorMessage(response.data.error);
+  }
+
+});
+
+const loggedOut = () => {
+  document.querySelector('#login-link').classList.remove('hidden');
+  document.querySelector('#signup-link').classList.remove('hidden');
+  document.querySelector('#logout-link').classList.add('hidden');
+  document.querySelector('#profile-link').classList.add('hidden');
+}
+
+const loggedIn = () => {
+  document.querySelector('#login-link').classList.add('hidden');
+  document.querySelector('#signup-link').classList.add('hidden');
+  document.querySelector('#profile-link').classList.remove('hidden');
+  document.querySelector('#logout-link').classList.remove('hidden');
+}
+
+
 // Event Listener for Logout Button
 
 
@@ -103,24 +135,25 @@ const authenticate = async () => {
     if (localStorage.getItem('userId')) {
       try {
         const response = await axios.get('http://localhost:3001/users/verify', {
-            params: {id: localStorage.getItem('userId') }
+            params: {id: localStorage.getItem('userId')}
         });
 
         if (response.data.message === 'success') {
-          document.querySelector('#login-link').classList.add('hidden');
-          document.querySelector('#signup-link').classList.add('hidden');
+          loggedIn();
         }
 
       }
       catch({response}) {
         showErrorMessage(response.data.error);
+        loggedOut();
       }
     }
 
     else {
-      document.querySelector('#login-link').classList.remove('hidden');
-      document.querySelector('#signup-link').classList.remove('hidden');
+      loggedOut();
     }
 }
+
+
 
 authenticate();
