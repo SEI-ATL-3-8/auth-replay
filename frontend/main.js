@@ -17,6 +17,15 @@ document.querySelector('#login-link').addEventListener('click', () => {
 document.querySelector('#logout-link').addEventListener('click', () => {
   document.querySelectorAll('section').forEach(s => s.classList.add('hidden'))
   document.querySelector('#home-content').classList.remove('hidden')
+
+  localStorage.removeItem('userId') //clear localstorage
+
+  document.querySelector('#login-link').classList.remove('hidden')
+  document.querySelector('#signup-link').classList.remove('hidden')
+  document.querySelector('#profile-link').classList.add('hidden')
+  document.querySelector('#logout-link').classList.add('hidden')
+
+
 })
 
 document.querySelector('#profile-link').addEventListener('click', () => {
@@ -62,6 +71,17 @@ document.querySelector('#login-form').addEventListener('submit', async (event)=>
 
     const userId = response.data.user.id
     localStorage.setItem('userId', userId)
+
+    document.querySelector('#login-link').classList.add('hidden')
+    document.querySelector('#signup-link').classList.add('hidden')
+    document.querySelector('#logout-link').classList.remove('hidden')
+    document.querySelector('#profile-link').classList.remove('hidden')
+
+    document.querySelectorAll('section').forEach(s => s.classList.add('hidden'))
+    document.querySelector('#home-content').classList.remove('hidden')
+  
+
+
 
   } catch (error) {
     console.log(error)
