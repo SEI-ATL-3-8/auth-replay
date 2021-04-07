@@ -32,7 +32,7 @@ document.querySelector('#profile-link').addEventListener('click', async () => {
   try {
       const response = await axios.get('http://localhost:3001/users/profile', {
          headers: {
-            Authorization: localStorage.getItem('userId')
+            authorization: localStorage.getItem('userId')
          }
       })
 
