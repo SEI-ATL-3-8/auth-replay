@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "express": "^4.17.1",
+    "rowdy-logger": "^1.0.2",
+    "sequelize": "^6.6.2"
+  }
+}
