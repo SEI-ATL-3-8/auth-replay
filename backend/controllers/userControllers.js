@@ -55,16 +55,4 @@ userControllers.getProfile = async (req, res) => {
     }
 }
 
-userControllers.verify = async (req, res) => {
-    try {
-        const user = await models.user.findOne({
-            where: {
-                id: req.headers.authorization
-            }
-        })
-    } catch (error) {
-        
-    }
-}
-
 module.exports = userControllers
