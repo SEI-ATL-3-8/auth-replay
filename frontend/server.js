@@ -3,10 +3,10 @@ const app = express()
 
 const routesReport = require('rowdy-logger').begin(app)
 
-const morgan = require('morgan')
+// const morgan = require('morgan')
 const path = require('path')
 
-app.use(morgan('tiny'))
+// app.use(morgan('tiny'))
 
 app.get('/', (req, res) => {
   const filepath = path.join(__dirname, 'index.html')

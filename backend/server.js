@@ -3,10 +3,12 @@ const app = express()
 
 const rowdy = require ('rowdy-logger')
 const routesReport = rowdy.begin(app)
+const morgan = require('morgan')
 
 // MIDDLEWARE
 app.use(express.json())
 app.use(require('cors')())
+app.use(morgan('tiny'))
 
 const models = require('./models')
 const { user } = models
@@ -43,9 +45,22 @@ const checkAuth = async (req, res, next) => {
   }
 }
 
+const getUserProfile = async (req, res, next) => {
+  try {
+    console.log('REQUEST OBJECT', req.query)
+    const foundUser = await user.findOne({
+      where: {id: req.query.userId}
+    })
+    res.json({user: foundUser})
+  } catch (error) {
+    next(error)
+  }
+}
+
 // ROUTES
 app.post('/users', createUser)
 app.post('/users/login', checkAuth)
+app.get('/users/profile', getUserProfile)
 
 const PORT = process.env.port || 3001
 app.listen(PORT, () => {

@@ -10,6 +10,8 @@ const signupContent = document.querySelector('#signup-content')
 const loginContent = document.querySelector('#login-content')
 const profileContent = document.querySelector('#profile-content')
 
+const profileInfo = document.querySelector('#profile-info')
+
 const signupForm = document.querySelector('#signup-form')
 const loginForm = document.querySelector('#login-form')
 
@@ -29,12 +31,31 @@ loginLink.addEventListener('click', () => {
 })
 
 logoutLink.addEventListener('click', () => {
+  localStorage.removeItem('userId')
   goHome()
+  checkLoggedIn()
 })
 
-profileLink.addEventListener('click', () => {
+profileLink.addEventListener('click', async () => {
   hideAllSections()
   profileContent.classList.remove('hidden')
+  try {
+    const userId = localStorage.getItem('userId')
+    console.log(userId)
+
+    const response = await axios.get('http://localhost:3001/users/profile', {
+      params: {
+        userId: userId
+      }
+    })
+    console.log('AXIOS RESPONSE', response.status, response.statusText, response)
+    if(response.status === 200){
+      const user = response.data.user
+      profileInfo.innerHTML = `<strong>email:</strong> ${user.email}; <strong>password:</strong> ${user.password}`
+    }
+  } catch (error) {
+    console.log(error)
+  }
 })
 
 
@@ -87,13 +108,6 @@ loginForm.addEventListener('submit', async (e) => {
   } catch (error) {
     console.log('ERROR', error)
   }
-})
-
-// USER LOGOUT
-logoutLink.addEventListener('click', (e) => {
-  localStorage.removeItem('userId')
-  goHome()
-  checkLoggedIn()
 })
 
 // REUSABLE FUNCTIONS
