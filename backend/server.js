@@ -26,8 +26,29 @@ const createUser = async (req, res) => {
 }
 app.post('/users', createUser)
 
+//Chapter 2
+const login = async (req,res) => {
+  try {
+    const user = await models.user.findOne({
+      where:{
+        email: req.body.email//look up user by email
+      }
+    })
+    // console.log(user)
+    //check if passwords match
+    if(user.password === req.body.password){
+      res.json({message: 'login successful', user: user})//if passwords match, respond w/ user obj
+    }else {
+      res.status(401) //if password not match, 401
+      res.json({error: 'incorrect password'})
+    }
 
-
+  } catch (error) {
+    res.status(400)
+    res.json({error:'login failed'})
+  }
+}
+app.post('/users/login', login) //POST /users/login
 
 
 

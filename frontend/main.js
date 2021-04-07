@@ -47,3 +47,24 @@ document.querySelector('#signup-form').addEventListener('submit', async (event)=
   }
 })
 
+//chapter 2
+document.querySelector('#login-form').addEventListener('submit', async (event)=> {
+  event.preventDefault()
+  const email = document.querySelector('#login-email').value
+  const password = document.querySelector('#login-password').value
+  
+  try {
+    const response = await axios.post('http://localhost:3001/users/login', {
+      email: email,
+      password: password
+    })
+    console.log(response)
+
+    const userId = response.data.user.id
+    localStorage.setItem('userId', userId)
+
+  } catch (error) {
+    console.log(error)
+    alert('login failed')
+  }
+})
