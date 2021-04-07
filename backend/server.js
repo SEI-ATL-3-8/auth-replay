@@ -14,6 +14,35 @@ const routesReport = rowdy.begin(app)
 app.use(express.json())
 app.use(require('cors')())
 
+const lookupUser = async (req, res, next) => {
+  try {
+    // this user lookup used to happen inside the profile route
+    // but irl, we want to look up our user for many many routes
+    // so we're doing it in a piece of middleware that runs before every route
+    
+    // get the value out of headers instead of body
+    // because that's where the frontend included it
+    // now that we encrypted the id before sending it to the client, we need to decrypt it when they send it back
+    const decryptedId = jwt.verify(req.headers.authorization, process.env.JWT_SECRET)
+    const user = await models.user.findOne({
+      where: {
+        // note that decryptedId will be an object like this: { userId: 5 }
+        id: decryptedId.userId
+      }
+    })
+
+    // now every downstream request can access the user we looked up via req.user
+    req.user = user
+
+    // if you don't call next, express will freeze. next lets it continue the waterfall
+    next()
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+// app.use tells express to run the lookupUser function before every route
+app.use(lookupUser)
+
 const models = require('./models')
 
 const createUser = async (req, res) => {
@@ -59,19 +88,15 @@ app.post('/users/login', login)
 
 const userProfile = async (req, res) => {  
   try {
-    // get the value out of headers instead of body
-    // because that's where the frontend included it
-
-    // now that we encrypted the id before sending it to the client, we need to decrypt it when they send it back
-    const decryptedId = jwt.verify(req.headers.authorization, process.env.JWT_SECRET)
-    const user = await models.user.findOne({
-      where: {
-        // note that decryptedId will be an object like this: { userId: 5 }
-        id: decryptedId.userId
-      }
-    })
-
-    res.json({ user })
+    // now that the user is being looked up in the middleware, there's no need to look it up here
+    // it's just available in req.user
+    // though we should still check if it's null or not
+    const user = req.user
+    if (user) {
+      res.json({ message: 'user profile found successfully', user })
+    } else {
+      res.status(404).json({ error: 'user profile not found' })
+    }
   } catch (error) {
     console.log(error)
     res.status(404).json({ error: 'user profile not found' })
