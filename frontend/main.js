@@ -36,6 +36,27 @@ profileLink.addEventListener('click', () => {
   hideSection()
   removeHidden(profileContent)
 })
+// functions 
+hideSection = () => {
+  section.forEach(s => s.classList.add('hidden'))
+}
+removeHidden = (x) => {
+  x.classList.remove('hidden')
+}
+addHidden = (x) => {
+  x.classList.add('hidden')
+}
+
+//shows right stuff at load
+if (localStorage.getItem('userId')){
+  addHidden(signUpLink)
+  addHidden(loginLink)
+}
+else{
+  addHidden(logoutLink)
+  addHidden(profileLink)
+}
+
 // form submission
 signUpForm.addEventListener('submit', async (e) => {
   e.preventDefault()
@@ -94,12 +115,3 @@ logoutLink.addEventListener('click', () => {
 
 
 
-hideSection = () => {
-  section.forEach(s => s.classList.add('hidden'))
-}
-removeHidden = (x) => {
-  x.classList.remove('hidden')
-}
-addHidden = (x) => {
-  x.classList.add('hidden')
-}
