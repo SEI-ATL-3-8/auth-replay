@@ -49,3 +49,27 @@ document.querySelector('#signup-form').addEventListener('submit', async (event) 
   }
 
 })
+
+document.querySelector('#login-form').addEventListener('submit', async (event) => {
+  event.preventDefault()
+
+  const email = document.querySelector('#login-email').value
+  const password = document.querySelector('#login-password').value
+
+  try {
+    const response = await axios.post('http://localhost:3001/users/login', {
+      email: email,
+      password: password
+    })
+
+    const userId = response.data.user.id
+    localStorage.setItem('userId', userId)
+
+    document.querySelector('#signup-link').classList.add('hidden')
+
+    console.log(response)
+  } catch (error) {
+    console.log(error)
+  }
+})
+

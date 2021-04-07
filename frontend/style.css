@@ -1,5 +1,11 @@
 body {
-  background-color: rgb(153, 141, 126);
+  background-color: #998d7e;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav-link {
@@ -14,4 +20,16 @@ body {
 
 .hidden {
   display: none;
+}
+
+/* #login-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
+
+#home-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
