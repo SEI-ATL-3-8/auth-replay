@@ -54,7 +54,7 @@ document.getElementById('signup-form').addEventListener('submit', async event =>
     try {
       const response = await axios.post('http://localhost:3001/users', formParams);
       if (response.data.message === 'success') {
-        const userId = response.data.user.id;
+        const { userId }= response.data;
     
         localStorage.setItem('userId', userId);
         authenticate();
@@ -80,7 +80,7 @@ document.getElementById('login-form').addEventListener('submit', async event => 
   try {
     const response = await axios.post('http://localhost:3001/users/login', formParams);
     if (response.data.message === 'success') {
-      const userId = response.data.user.id;
+      const { userId }= response.data;
       localStorage.setItem('userId', userId);
       authenticate();
       document.querySelectorAll('section').forEach(s => s.classList.add('hidden'))
@@ -97,9 +97,9 @@ document.getElementById('login-form').addEventListener('submit', async event => 
 
 document.getElementById('profile-link').addEventListener('click', async () => {
   authenticate();
-  const id = localStorage.getItem('userId');
+  const userId = localStorage.getItem('userId');
   try {
-    const response = await axios.get('http://localhost:3001/users/profile',{params: {id}});
+    const response = await axios.get('http://localhost:3001/users/profile',{params: {userId}});
     if (response.data.message === 'success') {
       document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
       document.querySelector('#profile-content').innerText = `email: ${response.data.user.email} \n password: ${response.data.user.password}`
@@ -135,7 +135,7 @@ const authenticate = async () => {
     if (localStorage.getItem('userId')) {
       try {
         const response = await axios.get('http://localhost:3001/users/verify', {
-            params: {id: localStorage.getItem('userId')}
+            params: {userId: localStorage.getItem('userId')}
         });
 
         if (response.data.message === 'success') {
