@@ -23,8 +23,3 @@ document.querySelector('#profile-link').addEventListener('click', () => {
   document.querySelectorAll('section').forEach(s => s.classList.add('hidden'))
   document.querySelector('#profile-content').classList.remove('hidden')
 })
-
-
-
-//chapter 1
-document.querySelector
