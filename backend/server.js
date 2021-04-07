@@ -7,6 +7,11 @@ const routesReport = rowdy.begin(app)
 app.use(express.json())
 app.use(require('cors')())
 
+//chapter 5 installed morgan [npm i morgan] on terminal and add this
+//morgan is like console.log, you dont have to console.log evrrything 
+const morgan = require('morgan')
+app.use(morgan('tiny'))
+ // chapter 5 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 const models = require('./models')
 
 //chapter 1
@@ -50,20 +55,29 @@ const login = async (req,res) => {
 }
 app.post('/users/login', login) //POST /users/login
 
+
+
+
+
 //chapter 5
 const profile = async (req, res) => {
   try {
-    let userProfile = await models.user.findOne({
-      where:{
-        id: req.body.id//look that user up
+    // console.log(req.headers)
+    const user = await models.user.findOne({
+      //to find logged in user, you use headers ad authorization, not userId,, it is just conventional..
+      where: { 
+        id: req.headers.authorization
       }
     })
-    // console.log(userProfile)
-    res.json({userProfile: user})
+    if(user === null){
+      res.status(404).json({ error: 'user not found'})
+    } else{
+    res.json({ message: 'user looked up successfully', user})
+    }
   } catch (error) {
-    res.status(401)
-    res.json({error: 'something went wrong'})
+    res.status(404).json({ error: 'user not found'})
   }
+  
 }
 
 app.get('/users/profile', profile) //GET /users/profile
