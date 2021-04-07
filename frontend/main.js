@@ -1,4 +1,4 @@
-// nav links
+ // nav links
 document.querySelector('#home-link').addEventListener('click', () => {
   document.querySelectorAll('section').forEach(s => s.classList.add('hidden'))
   document.querySelector('#home-content').classList.remove('hidden')
