@@ -14,3 +14,60 @@ app.listen(PORT, () => {
   routesReport.print()
 })
 
+const createUser = async(req, res) => {
+  try {
+    let user = await models.user.create ({
+    email: req.body.email,
+    password: req.body.password
+  })
+    res.json({message: 'ok', user})
+  } catch (error) {
+    res.status(400)
+    res.json({error: 'email already taken'})
+  }
+}
+app.post('/users', createUser)
+
+const login = async (req,res) => {
+  try {
+    const user = await models.user.findOne ({
+      where: {
+        email: req.body.email
+      }
+    })
+
+    if (user.password === req.body.password) {
+      res.json({message: 'login successful', user: user})
+    } else {
+      res.status(401)
+      res.json ({error: 'login failed, password is incorrect'})
+    }
+  } catch (error) {
+      res.status(400)
+      res.json ({error: 'login failed'})
+  }
+}
+app.post('/users/login', login)
+
+const profile = async (req, res) => {
+  try {
+    const userId = await models.user.findOne ({
+      where: {
+        id: req.query.id
+      }
+    })
+    console.log(userId)
+    if (userId) {
+      res.json({user: userId})
+    } else {
+      res.status(401)
+      res.json ({error: 'user is unathorized'})
+    }
+  } catch (error) {
+    res.status(400)
+    res.json ({error: 'profile does not exist'})
+}
+}
+
+app.get('/users/profile', profile)
+
