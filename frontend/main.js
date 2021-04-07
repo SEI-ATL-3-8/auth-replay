@@ -15,6 +15,7 @@ const logoutLink = document.querySelector('#logout-link')
 //profile shit
 const profileLink = document.querySelector('#profile-link')
 const profileContent = document.querySelector('#profile-content')
+const profileInfo = document.querySelector('#profile-info')
 // nav links
 homeLink.addEventListener('click', () => {
   hideSection()
@@ -32,9 +33,31 @@ logoutLink.addEventListener('click', () => {
   hideSection()
   removeHidden(homeContent)
 })
-profileLink.addEventListener('click', () => {
+profileLink.addEventListener('click', async () => {
   hideSection()
   removeHidden(profileContent)
+  try {
+    let userId = localStorage.getItem('userId')
+    console.log(userId)
+    let response = await axios.get('http://localhost:3001/users/profile', {
+      params: {
+        userId: userId
+      }
+    })
+    profileInfo.innerHTML = `OH SUP ${response.data.user.email}`
+  }
+
+  catch (error) {
+    alert('userId does not exist. You will be logged out')
+    hideSection()
+    localStorage.removeItem('userId')
+    removeHidden(homeContent)
+    addHidden(logoutLink)
+    addHidden(profileLink)
+    removeHidden(loginLink)
+    removeHidden(signUpLink)
+
+  }
 })
 // functions 
 hideSection = () => {
@@ -48,11 +71,11 @@ addHidden = (x) => {
 }
 
 //shows right stuff at load
-if (localStorage.getItem('userId')){
+if (localStorage.getItem('userId')) {
   addHidden(signUpLink)
   addHidden(loginLink)
 }
-else{
+else {
   addHidden(logoutLink)
   addHidden(profileLink)
 }
@@ -112,6 +135,7 @@ logoutLink.addEventListener('click', () => {
   removeHidden(loginLink)
   removeHidden(signUpLink)
 })
+
 
 
 

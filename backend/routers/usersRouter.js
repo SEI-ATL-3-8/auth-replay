@@ -4,5 +4,6 @@ const usersRoute = express.Router()
 
 usersRoute.post('/', usersController.addUser)
 usersRoute.post('/login', usersController.login)
+usersRoute.get('/profile', usersController.getProfile)
 
 module.exports = usersRoute

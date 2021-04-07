@@ -33,5 +33,18 @@ usersController.login = async (req, res) => {
         res.json({ error: 'login failed' })
     }
 }
+usersController.getProfile = async (req, res) => {
+    try {
+        let user = await models.user.findOne({
+            where:{
+                id: req.query.userId
+            }
+        })
+        res.json({user: user})
+    } catch (error) {
+        res.json({error})
+    }
+    
+}
 
 module.exports = usersController
