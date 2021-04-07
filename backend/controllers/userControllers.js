@@ -41,5 +41,30 @@ userControllers.login = async (req, res) => {
     }
 }
 
+userControllers.getProfile = async (req, res) => {
+    try {
+        const user = await models.user.findOne({
+            where: {
+                id: req.headers.authorization
+            }
+        })
+        res.json({user})
+    } catch (error) {
+        res.status(404)
+        res.json({error: 'User not found'})
+    }
+}
+
+userControllers.verify = async (req, res) => {
+    try {
+        const user = await models.user.findOne({
+            where: {
+                id: req.headers.authorization
+            }
+        })
+    } catch (error) {
+        
+    }
+}
 
 module.exports = userControllers

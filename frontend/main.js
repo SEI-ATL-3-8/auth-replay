@@ -15,13 +15,33 @@ document.querySelector('#login-link').addEventListener('click', () => {
 })
 
 document.querySelector('#logout-link').addEventListener('click', () => {
-  document.querySelectorAll('section').forEach(s => s.classList.add('hidden'))
-  document.querySelector('#home-content').classList.remove('hidden')
+    document.querySelectorAll('section').forEach(s => s.classList.add('hidden'))
+    document.querySelector('#home-content').classList.remove('hidden')
+    document.querySelector('#signup-link').classList.remove('hidden')
+    document.querySelector('#login-link').classList.remove('hidden')
+    document.querySelector('#logout-link').classList.add('hidden')
+    document.querySelector('#profile-link').classList.add('hidden')
+
+    localStorage.removeItem('userId')
 })
 
-document.querySelector('#profile-link').addEventListener('click', () => {
+document.querySelector('#profile-link').addEventListener('click', async () => {
   document.querySelectorAll('section').forEach(s => s.classList.add('hidden'))
   document.querySelector('#profile-content').classList.remove('hidden')
+
+  try {
+      const response = await axios.get('http://localhost:3001/users/profile', {
+         headers: {
+            Authorization: localStorage.getItem('userId')
+         }
+      })
+
+      document.querySelector('#profile-info').innerText = `Welcome ${response.data.user.email}! Good to see you again.`
+  } catch (error) {
+      alert('Profile not found')
+  }
+
+
 })
 
 
@@ -79,19 +99,10 @@ document.querySelector('#login-form').addEventListener('submit', async (event) =
   }
 })
 
-// Logout form
-document.querySelector('#logout-link').addEventListener('click', () => {
-    document.querySelectorAll('section').forEach(s => s.classList.add('hidden'))
-    document.querySelector('#home-content').classList.remove('hidden')
-    document.querySelector('#signup-link').classList.remove('hidden')
-    document.querySelector('#login-link').classList.remove('hidden')
-    document.querySelector('#logout-link').classList.add('hidden')
-    document.querySelector('#profile-link').classList.add('hidden')
 
-    localStorage.removeItem('userId')
-})
 
 // On Load
+
 if (localStorage.getItem('userId')) {
       document.querySelector('#signup-link').classList.add('hidden')
       document.querySelector('#login-link').classList.add('hidden')
