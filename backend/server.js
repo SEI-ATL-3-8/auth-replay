@@ -48,3 +48,26 @@ const login = async (req,res) => {
   }
 }
 app.post('/users/login', login)
+
+const profile = async (req, res) => {
+  try {
+    const userId = await models.user.findOne ({
+      where: {
+        id: req.query.id
+      }
+    })
+    console.log(userId)
+    if (userId) {
+      res.json({user: userId})
+    } else {
+      res.status(401)
+      res.json ({error: 'user is unathorized'})
+    }
+  } catch (error) {
+    res.status(400)
+    res.json ({error: 'profile does not exist'})
+}
+}
+
+app.get('/users/profile', profile)
+

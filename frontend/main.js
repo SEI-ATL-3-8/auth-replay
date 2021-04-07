@@ -11,6 +11,7 @@ const profileLink = document.querySelector('#profile-link')
 const profileContent = document.querySelector('#profile-content')
 const signupForm = document.querySelector('#signup-form')
 const loginForm = document.querySelector('#login-form')
+const profileInfo = document.querySelector('#profile-info')
 
 
 homeLink.addEventListener('click', () => {
@@ -40,9 +41,22 @@ logoutLink.addEventListener('click', () => {
   logoutLink.classList.add('hidden')
 })
 
-profileLink.addEventListener('click', () => {
+profileLink.addEventListener('click', async () => {
   section.forEach(s => s.classList.add('hidden'))
   profileContent.classList.remove('hidden')
+try {
+  const userId = localStorage.getItem('userId')
+
+  const response = await axios.get('http://localhost:3001/users/profile', {
+    params: {
+      id: userId
+    }
+  }) 
+  profileInfo.innerHTML=`Welcome ${response.data.user.email}, your password is: ${response.data.user.password}`;
+} catch (error) {
+  alert ('invalid user')
+}
+
 })
 
 signupForm.addEventListener('submit', async (event) => {
@@ -99,3 +113,5 @@ if (localStorage.getItem('userId')) {
   logoutLink.classList.add('hidden')
   profileLink.classList.add('hidden')
 }
+
+
