@@ -16,27 +16,34 @@ app.use(require('cors')())
 
 const lookupUser = async (req, res, next) => {
   try {
-    // this user lookup used to happen inside the profile route
-    // but irl, we want to look up our user for many many routes
-    // so we're doing it in a piece of middleware that runs before every route
-    
-    // get the value out of headers instead of body
-    // because that's where the frontend included it
-    // now that we encrypted the id before sending it to the client, we need to decrypt it when they send it back
-    const decryptedId = jwt.verify(req.headers.authorization, process.env.JWT_SECRET)
-    const user = await models.user.findOne({
-      where: {
-        // note that decryptedId will be an object like this: { userId: 5 }
-        id: decryptedId.userId
-      }
-    })
-
-    // now every downstream request can access the user we looked up via req.user
-    req.user = user
+    // now that we are looking up the user on every request, some requests (ie login and signup) won't have an authorization header
+    // and for those we shouldn't attempt to decrypt it
+    if (req.headers.authorization) {
+      // this user lookup used to happen inside the profile route
+      // but irl, we want to look up our user for many many routes
+      // so we're doing it in a piece of middleware that runs before every route
+      
+      // get the value out of headers instead of body
+      // because that's where the frontend included it
+      // now that we encrypted the id before sending it to the client, we need to decrypt it when they send it back
+      const decryptedId = jwt.verify(req.headers.authorization, process.env.JWT_SECRET)
+      const user = await models.user.findOne({
+        where: {
+          // note that decryptedId will be an object like this: { userId: 5 }
+          id: decryptedId.userId
+        }
+      })
+  
+      // now every downstream request can access the user we looked up via req.user
+      req.user = user
+    } else {
+      req.user = null
+    }
 
     // if you don't call next, express will freeze. next lets it continue the waterfall
     next()
   } catch (error) {
+    console.log(error)
     res.status(400).json({ error: error.message })
   }
 }
@@ -58,6 +65,7 @@ const createUser = async (req, res) => {
 
     res.json({ message: 'signup successful', userId: encryptedId })
   } catch (error) {
+    console.log(error)
     res.status(400)
     res.json({ error: 'email already taken' })
   }
