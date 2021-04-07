@@ -4,6 +4,8 @@ const app = express()
 const rowdy = require ('rowdy-logger')
 const routesReport = rowdy.begin(app)
 
+let loginState = 0
+
 app.use(express.json())
 app.use(require('cors')())
 
@@ -51,6 +53,27 @@ const login = async (req, res) => {
   }
 }
 
+const getProfile = async (req, res) => {
+  try {
+    
+    const user = await models.user.findOne({
+      where: {
+        id: req.body.id
+      }
+    })
+    if (user.id === req.body.id) {
+    res.json({ message: 'user found', user: user})
+  } else if (user.id === null) {
+    res.status(401)
+    res.json({error: 'No user found'})
+  }
+  } catch (error) {
+    res.status(400)
+    res.json({error: 'No user found'})
+  }
+}
+
+app.get('/users/profile', getProfile)
 app.post('/users/login', login)
 
 const PORT = process.env.port || 3001
