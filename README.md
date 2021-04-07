@@ -83,4 +83,3 @@
   - include userId in headers of every request, either with axios default or request function
 ### Backend
   - install middleware that looks up user before every request and puts it (or null) into req.user
-
