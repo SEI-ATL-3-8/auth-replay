@@ -3,6 +3,9 @@
   text-decoration: underline;
   margin: 0.5em;
 }
+body{
+  align-items: center;
+}
 
 .nav-link:hover {
   cursor: pointer;
