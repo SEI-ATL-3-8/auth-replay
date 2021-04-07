@@ -69,7 +69,9 @@ document.querySelector('#profile-link').addEventListener('click', e =>{
   if (localStorage.getItem('userIdLoggedIn')) {
     console.log(localStorage.getItem('userIdLoggedIn'));
     axios.get('http://localhost:3001/user/verify', {
-      id: localStorage.getItem('userIdLoggedIn')
+      params: {
+        id: localStorage.getItem('userIdLoggedIn')
+      }
     }).then(res => {
       console.log(res);
       if (res.data.error) {
@@ -77,7 +79,7 @@ document.querySelector('#profile-link').addEventListener('click', e =>{
         localStorage.removeItem('userIdLoggedIn')
         document.querySelector('#profile-info').innerHTML = 'You arent supposed to be here r u?'
       } else {
-        document.querySelector('#profile-info').innerHTML = res.data.user.email
+        document.querySelector('#profile-info').innerHTML = 'hi'
       }
     })
   }
