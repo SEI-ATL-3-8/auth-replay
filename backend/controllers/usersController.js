@@ -9,7 +9,8 @@ usersController.addUser = async (req, res) => {
         })
         res.json({message: 'User Created', user})
     } catch (error) {
-        res.json({error})
+        res.status(400)
+        res.json({error: 'email already exists'})
     }
 }
 
