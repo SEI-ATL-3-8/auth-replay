@@ -16,4 +16,27 @@ userController.create = async (req, res) => {
     }
 }
 
+userController.getAll = async (req, res) => {
+    try {
+        let users = await models.user.findAll()
+
+        res.json({users})
+    } catch (error) {
+        res.json({error})
+    }
+}
+
+userController.find = async (req, res) => {
+    try {
+        let user = await models.user.findOne({
+            where: {
+                id: req.params.id
+            }
+        })
+        res.json({user})
+    } catch (error) {
+        res.json({error})
+    }
+}
+
 module.exports = userController

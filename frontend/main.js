@@ -44,6 +44,9 @@ document.querySelector('#signup-form').addEventListener('submit', async (event) 
     const userId = response.data.user.id 
     localStorage.setItem('userId', userId)
 
+    document.querySelector('#signup-link').classList.add('hidden')
+    document.querySelector('#login-link').classList.add('hidden')
+
   } catch (error) {
     console.log(error)
   }
@@ -66,10 +69,13 @@ document.querySelector('#login-form').addEventListener('submit', async (event) =
     localStorage.setItem('userId', userId)
 
     document.querySelector('#signup-link').classList.add('hidden')
+    document.querySelector('#login-link').classList.add('hidden')
 
     console.log(response)
   } catch (error) {
     console.log(error)
   }
 })
+
+document.querySelector('')
 
