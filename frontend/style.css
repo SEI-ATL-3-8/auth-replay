@@ -1,3 +1,7 @@
+body {
+  background-color: rgb(153, 141, 126);
+}
+
 .nav-link {
   color: blue;
   text-decoration: underline;
