@@ -2,6 +2,7 @@
 document.querySelector('#home-link').addEventListener('click', () => {
   document.querySelectorAll('section').forEach(s => s.classList.add('hidden'))
   document.querySelector('#home-content').classList.remove('hidden')
+
 })
 
 document.querySelector('#signup-link').addEventListener('click', () => {
@@ -17,11 +18,30 @@ document.querySelector('#login-link').addEventListener('click', () => {
 document.querySelector('#logout-link').addEventListener('click', () => {
   document.querySelectorAll('section').forEach(s => s.classList.add('hidden'))
   document.querySelector('#home-content').classList.remove('hidden')
+  localStorage.removeItem('userId')
+  document.querySelector('#login-link').classList.remove('hidden')
+  document.querySelector('#signup-link').classList.remove('hidden')
+  document.querySelector('#logout-link').classList.add('hidden')
+  document.querySelector('#profile-link').classList.add('hidden')
 })
 
 document.querySelector('#profile-link').addEventListener('click', () => {
   document.querySelectorAll('section').forEach(s => s.classList.add('hidden'))
   document.querySelector('#profile-content').classList.remove('hidden')
+
+  try {
+    // it's a firm convention to put the id of the currently logged in user into the authorization headers, not the request body
+    const response = await axios.get('http://localhost:3001/users/profile', {
+      headers: {
+        Authorization: localStorage.getItem('userId')
+      }
+    })
+
+    document.querySelector('#profile-info').innerText = `Welcome back, ${response.data.user.email}!`
+
+  } catch (error) {
+    alert('profile not found')
+  }
 })
 
 //form submission
@@ -40,7 +60,7 @@ document.querySelector('#signup-form').addEventListener('submit', async (event) 
   console.log(response)
   } catch (error) {
     console.log(error)
-    alert('cannot login')
+    alert('use different')
   }
   // make a request
   // POST http://localhost:3001/users
@@ -71,7 +91,7 @@ document.querySelector('#login-form').addEventListener('submit', async (event) =
   document.querySelector('#profile-link').classList.remove('hidden')
 
   document.querySelectorAll('section').forEach(s => s.classList.add('hidden'))
-
+  document.querySelector('#home-content').classList.remove('hidden')  
 
   } catch (error) {
     console.log(error)
@@ -79,13 +99,13 @@ document.querySelector('#login-form').addEventListener('submit', async (event) =
   }
 })
 
+
+
+
 if (localStorage.getItem('userId')) {
   document.querySelector('#signup-link').classList.add('hidden')
   document.querySelector('#login-link').classList.add('hidden')
 } else {
-
   document.querySelector('#logout-link').classList.add('hidden')
   document.querySelector('#profile-link').classList.add('hidden')
 }
-
-

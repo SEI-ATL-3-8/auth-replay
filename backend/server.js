@@ -50,6 +50,28 @@ const login = async (req,res) => {
 }
 app.post('/users/login', login)
 
+const userProfile = async (req, res) => {  
+  try {
+    // get the value out of headers instead of body
+    // because that's where the frontend included it
+    console.log(req.headers)
+    const user = await models.user.findOne({
+      where: {
+        id: req.headers.authorization
+      }
+    })
+
+    res.json({ user })
+  } catch (error) {
+    res.status(404).json({ error: 'user profile not found' })
+  }
+}
+app.get('/users/profile', userProfile)
+
+
+
+
+
 
 // const lookEmUp = 
 
@@ -58,4 +80,3 @@ const PORT = process.env.port || 3001
 app.listen(PORT, () => {
   routesReport.print()
 })
-
