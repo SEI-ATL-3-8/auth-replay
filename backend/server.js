@@ -50,7 +50,23 @@ const login = async (req,res) => {
 }
 app.post('/users/login', login) //POST /users/login
 
+//chapter 5
+const profile = async (req, res) => {
+  try {
+    let userProfile = await models.user.findOne({
+      where:{
+        id: req.body.id//look that user up
+      }
+    })
+    // console.log(userProfile)
+    res.json({userProfile: user})
+  } catch (error) {
+    res.status(401)
+    res.json({error: 'something went wrong'})
+  }
+}
 
+app.get('/users/profile', profile) //GET /users/profile
 
 
 

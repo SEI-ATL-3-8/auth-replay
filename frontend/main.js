@@ -97,3 +97,21 @@ if(localStorage.getItem('userId')){
   document.querySelector('#logout-link').classList.add('hidden')
   document.querySelector('#profile-link').classList.add('hidden') //else show logged out
 }
+
+
+//chapter 5
+
+document.querySelector('#profile-link').addEventListener('submit', async (event)=> {
+  event.preventDefault()
+  if(localStorage.getItem('userId')){
+  try {
+    const response = await axios.post('http://localhost:3001/users/profile', {
+      email: email
+    })
+    console.log(response)
+
+    document.querySelector('#profile-link').classList.remove('hidden')
+  
+  } catch (error) {
+    console.log(error)
+  }}}
