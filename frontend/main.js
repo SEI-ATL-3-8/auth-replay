@@ -17,7 +17,7 @@ document.querySelector('#login-link').addEventListener('click', () => {
 document.querySelector('#logout-link').addEventListener('click', () => {
   document.querySelectorAll('section').forEach(s => s.classList.add('hidden'))
   document.querySelector('#home-content').classList.remove('hidden')
-
+//chapter 3
   localStorage.removeItem('userId') //clear localstorage
 
   document.querySelector('#login-link').classList.remove('hidden')
@@ -80,11 +80,20 @@ document.querySelector('#login-form').addEventListener('submit', async (event)=>
     document.querySelectorAll('section').forEach(s => s.classList.add('hidden'))
     document.querySelector('#home-content').classList.remove('hidden')
   
-
-
-
   } catch (error) {
     console.log(error)
     alert('login failed')
   }
 })
+
+//chapter 4
+//put this f outside of any above fs, so this will happend when page loads.
+
+// check local storage
+if(localStorage.getItem('userId')){
+  document.querySelector('#login-link').classList.add('hidden')
+  document.querySelector('#signup-link').classList.add('hidden') //if present, show logged in state
+}else{
+  document.querySelector('#logout-link').classList.add('hidden')
+  document.querySelector('#profile-link').classList.add('hidden') //else show logged out
+}
