@@ -20,7 +20,7 @@ usersController.login = async (req, res) => {
                 email: req.body.email
             }
         })
-        if (user.password = req.body.password) {
+        if (user.password === req.body.password) {
             res.json({ message: "welcome back", user: user })
         }
         else {
